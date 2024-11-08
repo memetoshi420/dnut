@@ -518,3 +518,22 @@ h2 {
     position: relative;
     /* Width is controlled by the grid layout */
 }
+
+/* Add bottom tree styles */
+.bottom-tree {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 2rem;
+    position: relative;
+    z-index: 5;
+}
+
+.tree-image {
+    width: 100%;
+    height: auto;
+    max-width: 1200px;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    z-index: 5;
+}

@@ -1,0 +1,520 @@
+@font-face {
+    font-family: 'BounceFont';
+    src: url('./fonts/bouncy.woff2') format('woff2'),
+         url('./fonts/bouncy.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --primary-color: #FF6B6B;
+    --secondary-color: #FF8C42;
+    --accent-color: #FFD93D;
+    --panel-bg: #FFF9E5;
+    --text-color: #4A1C03;
+    --autumn-gradient: linear-gradient(135deg, #FF6B6B, #FF8C42, #FFD93D);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'BounceFont', sans-serif;
+    position: relative;
+    overflow-x: hidden;
+    background: var(--autumn-gradient);
+    min-height: 100vh;
+    z-index: 0;
+}
+
+/* Create static random nut pattern */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: 
+        /* Each layer has different rotation and position */
+        url('img/nut.png') 0 0 / 60px 60px repeat,
+        url('img/nut.png') 15px 10px / 60px 60px repeat,
+        url('img/nut.png') -5px 20px / 60px 60px repeat,
+        url('img/nut.png') 25px -8px / 60px 60px repeat;
+    transform: 
+        /* Apply different rotations to each layer */
+        rotate(15deg),
+        rotate(-23deg),
+        rotate(42deg),
+        rotate(-8deg);
+    opacity: 0.8;
+}
+
+/* Remove the animated after pseudo-element */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background-image: 
+        radial-gradient(
+            circle at center,
+            rgba(0, 0, 0, 0.15) 0.5px,
+            transparent 0.5px
+        );
+    background-size: 3px 3px;
+    background-position: center;
+    pointer-events: none;
+}
+
+/* Comic halftone pattern mixin */
+@property --dot-size {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 2px;
+}
+
+.halftone {
+    background-image: radial-gradient(
+        circle at center,
+        black var(--dot-size),
+        transparent calc(var(--dot-size) + 1px)
+    );
+    background-size: 10px 10px;
+    opacity: 0.1;
+}
+
+/* Comic book page layout container */
+.comic-page {
+    max-width: 1200px;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+    padding: 2rem;
+    position: relative;
+    z-index: 3;
+}
+
+/* Hero panel - spans full width */
+.hero {
+    grid-column: 1 / -1;
+}
+
+/* About panel - spans full width */
+.about {
+    grid-column: 1 / -1;
+}
+
+/* Links panel - spans full width */
+.links {
+    grid-column: 1 / -1;
+}
+
+/* Comic Panel Styling */
+.comic-panel {
+    background-color: var(--panel-bg);
+    border: 4px solid #000;
+    position: relative;
+    padding: 1.5rem;
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.7);
+    transition: transform 0.3s ease;
+    overflow: hidden; /* Ensure the pattern stays within bounds */
+    --random-rotation: 0deg;
+    transform: rotate(var(--random-rotation));
+}
+
+/* Comic panel effects */
+.comic-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(
+            circle at center,
+            rgba(0, 0, 0, 0.2) 0.5px,
+            transparent 0.5px
+        );
+    background-size: 3px 3px;
+    background-position: center;
+    z-index: 0;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Ensure content stays above the halftone pattern */
+.comic-panel > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Panel hover effect */
+.comic-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 12px 12px 0 rgba(0,0,0,0.8);
+}
+
+/* Comic speech bubbles for text */
+.speech-bubble {
+    background: white;
+    border: 3px solid black;
+    border-radius: 30px;
+    padding: 1rem;
+    position: relative;
+    margin: 1rem 0;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.8);
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 20px;
+    border: 10px solid transparent;
+    border-top-color: black;
+}
+
+/* Comic style headings */
+h2 {
+    font-size: 2.5rem;
+    color: #FF8C42;
+    text-transform: uppercase;
+    text-shadow: 
+        -1px -1px 0 #000,  /* Top-left stroke */
+         1px -1px 0 #000,  /* Top-right stroke */
+        -1px  1px 0 #000,  /* Bottom-left stroke */
+         1px  1px 0 #000,  /* Bottom-right stroke */
+         3px 3px 0 #000;   /* Drop shadow */
+    margin: 0 0 1rem 0;
+    transform: rotate(-2deg);
+    text-align: center;
+}
+
+/* Action buttons */
+.comic-button {
+    background: var(--secondary-color);
+    color: black;
+    padding: 1rem 2rem;
+    border: 3px solid black;
+    transform: rotate(-3deg);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    box-shadow: 4px 4px 0 black;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.comic-button:hover {
+    transform: rotate(3deg) scale(1.1);
+    box-shadow: -4px 4px 0 black;
+    background: var(--accent-color);
+    color: var(--text-color);
+}
+
+/* POW! effect for buttons */
+.comic-button::before {
+    content: 'POW!';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    background: var(--accent-color);
+    padding: 0.5rem;
+    border: 2px solid black;
+    transform: rotate(15deg);
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.comic-button:hover::before {
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .comic-page {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .hero, .about, .links {
+        grid-column: 1 / -1;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+}
+
+/* Remove the title styles */
+.main-title, .subtitle {
+    display: none;
+}
+
+/* Restore image styles */
+.logo {
+    max-width: 300px;
+    margin-bottom: 1.5rem;
+}
+
+.subheader {
+    max-width: 250px;
+    margin-bottom: 1.5rem;
+    height: auto;
+}
+
+.character {
+    max-width: 250px;
+    margin-bottom: 0;
+}
+
+/* Remove any other title-specific styles */
+
+/* Update hero panel layout */
+.hero .comic-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Update spacing for hero elements */
+.logo {
+    max-width: 300px;
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+    margin-bottom: 0.2rem;
+    /* Using existing h2 styles for consistency */
+}
+
+.character {
+    max-width: 250px;
+    margin-bottom: 0;
+}
+
+/* Remove old subheader image styles */
+.subheader {
+    display: none;
+}
+
+/* Add square comic strip panels */
+.comic-strip-panel {
+    aspect-ratio: 1;
+    position: relative;
+}
+
+.comic-strip-panel img {
+    width: 90%;
+    height: auto;
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Style comic strip speech bubbles */
+.comic-speech {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    max-width: 70%;
+    background: var(--panel-bg);
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+}
+
+.comic-speech::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid black;
+}
+
+/* Individual panel rotations */
+.comic-panel {
+    --random-rotation: 0deg;
+    transform: rotate(var(--random-rotation));
+}
+
+.hero .comic-panel { --random-rotation: -1deg; }
+.about .comic-panel { --random-rotation: 2deg; }
+.links .comic-panel { --random-rotation: -1.5deg; }
+.comic-strip-panel:nth-child(4n + 1) { --random-rotation: 1.5deg; }
+.comic-strip-panel:nth-child(4n + 2) { --random-rotation: -2deg; }
+.comic-strip-panel:nth-child(4n + 3) { --random-rotation: 1deg; }
+.comic-strip-panel:nth-child(4n + 4) { --random-rotation: -1.5deg; }
+
+/* Update button container */
+.button-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+}
+
+/* Add star burst effect behind buttons */
+.comic-button {
+    /* Existing button styles... */
+    position: relative;
+    z-index: 2;
+}
+
+.comic-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    background: var(--accent-color);
+    z-index: -1;
+    transform: translate(-50%, -50%) rotate(0deg);
+    clip-path: polygon(
+        50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 
+        50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+    );
+}
+
+/* Star burst animation on hover */
+.comic-button:hover::after {
+    animation: starRotate 0.3s ease-out forwards;
+}
+
+@keyframes starRotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(180deg) scale(1.2);
+    }
+}
+
+/* Update character image size and positioning */
+.character {
+    max-width: 450px; /* Increased from 375px to 450px */
+    margin: 0;
+    position: relative;
+    bottom: -1.5rem;
+    display: block;
+}
+
+/* Adjust hero panel padding to accommodate larger image */
+.hero .comic-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding-bottom: 0;
+}
+
+/* Adjust spacing for other hero elements */
+.logo {
+    max-width: 300px;
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+    margin-bottom: 1rem;
+}
+
+.character {
+    max-width: 450px;
+    margin: 0;
+    position: relative;
+    bottom: -1.5rem;
+    display: block;
+}
+
+/* Add floating stickers */
+.floating-sticker {
+    position: fixed;
+    width: 200px; /* Increased from 150px */
+    height: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    animation: float-wiggle 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)); /* Add white glow */
+}
+
+.sticker-left {
+    left: 50px; /* Increased from 20px */
+    animation-delay: 0s;
+}
+
+.sticker-right {
+    right: 50px; /* Increased from 20px */
+    animation-delay: 1.5s;
+    transform: translateY(-50%) scaleX(-1); /* Flip horizontally */
+}
+
+@keyframes float-wiggle {
+    0%, 100% {
+        transform: translateY(-50%) rotate(-8deg) scale(1, 0.95);
+    }
+    50% {
+        transform: translateY(-65%) rotate(8deg) scale(1.1, 1.05);
+    }
+}
+
+/* Adjust for right sticker flip */
+.sticker-right {
+    animation-name: float-wiggle-right;
+}
+
+@keyframes float-wiggle-right {
+    0%, 100% {
+        transform: translateY(-50%) scaleX(-1) rotate(-8deg) scale(1, 0.95);
+    }
+    50% {
+        transform: translateY(-65%) scaleX(-1) rotate(8deg) scale(1.1, 1.05);
+    }
+}
+
+/* Hide stickers on mobile */
+@media (max-width: 1400px) {
+    .floating-sticker {
+        display: none;
+    }
+}
+
+/* Add max-width constraints for hero and links panels */
+.hero .comic-panel,
+.links .comic-panel {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+/* Keep comic strip panels at current width */
+.comic-strip-panel {
+    aspect-ratio: 1;
+    position: relative;
+    /* Width is controlled by the grid layout */
+}

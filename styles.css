@@ -537,3 +537,15 @@ h2 {
     position: relative;
     z-index: 5;
 }
+
+/* Add contract address styles */
+.contract-address {
+    font-family: monospace;
+    font-size: 1.2rem;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    word-break: break-all;
+    text-align: center;
+}

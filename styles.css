@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'BounceFont';
-    src: url('/dnut/fonts/bouncy.woff2') format('woff2'),
-         url('/dnut/fonts/bouncy.woff') format('woff');
+    src: url('fonts/bouncy.woff2') format('woff2'),
+         url('fonts/bouncy.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
